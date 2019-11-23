@@ -2,22 +2,9 @@ from tkinter import *
 import tkinter.messagebox
 import tkinter.ttk as ttk
 #from tkinter.ttk import *
-import sqlite3
+import Main_fun
 
 
-con = sqlite3.connect('Przychodnia.db')
-con.row_factory = sqlite3.Row
-cur = con.cursor()
-
-cur.execute("""CREATE TABLE IF NOT EXISTS pacjent (
-                id_pacjenta INTEGER PRIMARY KEY AUTOINCREMENT,
-                imie TEXT,
-                nazwisko TEXT,
-                pesel int,
-                data int,
-                rodzaj_badania TEXT,
-                analog_cyfr TEXT,
-                gabinet int)""")
 
 class PodstawoweManu (ttk.Frame):
 
@@ -138,7 +125,7 @@ class PodstawoweManu (ttk.Frame):
     def dellall(self):
         answer = tkinter.messagebox.askquestion('','Czy na pewno chcesz skasowac baze!')
         if answer == 'yes':
-            cur.execute("DROP TABLE IF EXISTS pacjent")
+            Main_fun.deleta_all_patient()
 
     def loop(self):
         self.window.mainloop()
@@ -248,16 +235,16 @@ class DodawaniePacjentow(ttk.Frame):
         self.button_3.grid(row=7, columnspan=3)
     """
     def dodawanie(self):
-        list=[]
-        list.append(self.entry_1.get())
-        list.append(self.entry_2.get())
-        list.append(self.entry_3.get())
-        list.append(self.entry_4.get())
-        list.append(self.entry_5.get())
-        list.append(self.entry_6.get())
-        list.append(self.entry_7.get())
-        cur.execute('INSERT INTO pacjent VALUES(Null,?,?,?,?,?,?,?);', (list[0], list[1], list[2], list[3], list[4], list[5], list[6]))
-        con.commit()
+        patient_atr=[]
+        patient_atr.append(self.entry_1.get())
+        patient_atr.append(self.entry_2.get())
+        patient_atr.append(self.entry_3.get())
+        patient_atr.append(self.entry_4.get())
+        patient_atr.append(self.entry_5.get())
+        patient_atr.append(self.entry_6.get())
+        patient_atr.append(self.entry_7.get())
+
+        Main_fun.add_pacient(patient_atr)
         self.master.destroy()
 class WyborPacjenta:
 
@@ -285,19 +272,19 @@ class WyborPacjenta:
 
     def id(self):
         self.i_d = ID(self.master)
-        con.commit()
+        Main_fun.commit()
         #self.master.destroy()
     def imie(self):
         self.imie = Imie(self.master)
-        con.commit()
+        Main_fun.commit()
         #self.master.destroy()
     def nazwisko(self):
         self.nazwisko = Imie(self.master)
-        con.commit()
+        Main_fun.commit()
         #self.master.destroy()
     def pesel(self):
         self.pesel= Pesel(self.master)
-        con.commit()
+        Main_fun.commit()
         #self.master.destroy()
 class Imie:
 
@@ -323,13 +310,10 @@ class Imie:
         self.button.grid(row=1,columnspan=2)
 
     def wyswietl_imie(self):
-        a = self.enter.get()
-
-        cur.execute("""SELECT * FROM pacjent WHERE imie = ?;""", (a,))
-        p = cur.fetchall()
-
-        b = Wyswietlacz(self.master,p)
-        con.commit()
+        name_entry_get = self.enter.get()
+        patient_data = Main_fun.name_of_patient(name_entry_get)
+        Wyswietlacz(self.master,patient_data)
+        Main_fun.commit()
         #self.master.destroy()
 class ID:
 
@@ -354,13 +338,11 @@ class ID:
         self.button.grid(row=1,columnspan=2)
 
     def wyswietl_id(self):
-        a = self.enter.get()
+        name_entry_get = self.enter.get()
+        patient_data = Main_fun.id_of_patient(name_entry_get)
 
-        cur.execute("""SELECT * FROM pacjent WHERE id_pacjenta = ?;""", (a,))
-        p = cur.fetchall()
-
-        b = Wyswietlacz(self.master, p)
-        con.commit()
+        Wyswietlacz(self.master, patient_data)
+        Main_fun.commit()
         #self.master.destroy()
 class Nazwisko:
 
@@ -383,14 +365,12 @@ class Nazwisko:
 
         self.button.grid(row=1,columnspan=2)
     def wyswietl_nazwisko(self):
-        a = self.enter.get()
+        surname_entry_get = self.enter.get()
+        patient_data=Main_fun.surname_of_patient(surname_entry_get)
 
-        cur.execute("""SELECT * FROM pacjent WHERE nazwisko = ?;""", (a,))
-        p = cur.fetchall()
+        Wyswietlacz(self.master,patient_data)
 
-        b = Wyswietlacz(self.master,p)
-
-        con.commit()
+        Main_fun.commit()
         #self.master.destroy()
 class Pesel:
 
@@ -415,13 +395,12 @@ class Pesel:
         self.button.grid(row=1,columnspan=2)
 
     def wyswietl_pesel(self):
-        a = self.enter.get()
+        pesel_entry_get= self.enter.get()
 
-        cur.execute("""SELECT * FROM pacjent WHERE pesel = ?;""", (a,))
-        p = cur.fetchall()
+        patient_data=Main_fun.pesel_of_patient(pesel_entry_get)
 
-        b = Wyswietlacz(self.master,p)
-        con.commit()
+        b = Wyswietlacz(self.master,patient_data)
+        Main_fun.commit()
         #self.master.destroy()
 class UsunPacjenta:
 
@@ -442,9 +421,8 @@ class UsunPacjenta:
         self.entry.grid(row=0,column=1)
 
     def usun(self):
-        a = self.entry.get()
-        cur.execute('DELETE FROM pacjent WHERE id_pacjenta=?;', (a,))
-        con.commit()
+        id_entry_get = self.entry.get()
+        Main_fun.delete_patient(id_entry_get)
         self.master.destroy()
 class WszyscyPacjenci:
 
@@ -489,13 +467,11 @@ class WszyscyPacjenci:
         scrollbar.pack(side=RIGHT,fill=Y)
         listbox.pack(fill=BOTH,expand=1)
 
-
-        cur.execute(
-            """SELECT pacjent.id_pacjenta,imie,nazwisko,pesel,data,rodzaj_badania,analog_cyfr,gabinet FROM pacjent""")
-        p = cur.fetchall()
+        all_patient_data=Main_fun.show_all_patient()
 
 
-        for i in p:
+
+        for i in all_patient_data:
             listbox.insert(END, (i['id_pacjenta'], i['imie'], i['nazwisko'], i['pesel'], i['data'], i['rodzaj_badania'],
                   i['analog_cyfr'],
                   i['gabinet']))
