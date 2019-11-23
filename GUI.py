@@ -119,16 +119,15 @@ class PodstawoweManu (ttk.Frame):
     def usunpacjenta(self):
         self.usun_pacjenta = UsunPacjenta(self.window)
     def wszyscypacjenci(self):
-        self.wszyscy_pacjenci = WszyscyPacjenci(self.window)
+        pass
     def wyborpacjenta(self):
-        self.wybor_pacjenta = WyborPacjenta(self.window)
+        selectpc()
     def dellall(self):
         answer = tkinter.messagebox.askquestion('','Czy na pewno chcesz skasowac baze!')
         if answer == 'yes':
             Main_fun.deleta_all_patient()
 
-    def loop(self):
-        self.window.mainloop()
+
 
 class DodawaniePacjentow(ttk.Frame):
 
@@ -145,6 +144,7 @@ class DodawaniePacjentow(ttk.Frame):
         self.layout()
 
     def layout(self):
+        global root_01
         title = ttk.Label(self, text="Dane pacjenta:", style="title.TLabel")
         title.place(x=0, y=0)
 
@@ -156,11 +156,12 @@ class DodawaniePacjentow(ttk.Frame):
                       "Jakie zdjecie",
                       "Podaj gabinet"]
         layout_counter = 50
-        for i in label_list:
-            label_01 = ttk.Label(self, text="{}:".format(i), style="label_01.TLabel")
-            enrty_01 = ttk.Entry(self,width=35)
+        self.entry = []
+        for i in range(len(label_list)):
+            label_01 = ttk.Label(self, text="{}:".format(label_list[i]), style="label_01.TLabel")
+            self.entry.append(ttk.Entry(self,width=35))
             label_01.place(x=0, y=layout_counter)
-            enrty_01.place(x=160,y=layout_counter)
+            self.entry[i].place(x=160,y=layout_counter)
             layout_counter +=30
         button_1 = ttk.Button(self, text="OK", style="TButton")
         button_1.place(x=0,y=layout_counter)
@@ -192,84 +193,53 @@ class DodawaniePacjentow(ttk.Frame):
                   foreground=[('pressed', 'blue'), ('active', 'blue')],
                   background=[('pressed', '!disabled', 'black'), ('active', 'white')]
                   )
-    """
-        self.label_1 = Label(frame_2,text="Podaj Imie")
-        self.label_2 = Label(frame_2,text="Podaj Nazwisko")
-        self.label_3 = Label(frame_2,text="Podaj Pesel")
-        self.label_4 = Label(frame_2,text="Podaj Date")
-        self.label_5 = Label(frame_2,text="Podaj rodzaj badania")
-        self.label_6 = Label(frame_2,text="Jakie zdjecie")
-        self.label_7 = Label(frame_2,text="Podaj gabinet")
 
-        self.entry_1 = Entry(frame_2, width = 20)
-        self.entry_2 = Entry(frame_2, width = 20)
-        self.entry_3 = Entry(frame_2, width = 20)
-        self.entry_4 = Entry(frame_2, width = 20)
-        self.entry_5 = Entry(frame_2, width = 20)
-        self.entry_6 = Entry(frame_2, width = 20)
-        self.entry_7 = Entry(frame_2, width = 20)
-
-        #self.button_1 = Button(frame_2, text="Analog", height = 1, width = 7)
-        #self.button_2 = Button(frame_2, text="Cyfrowka", height = 1, width = 7)
-        self.button_3 = Button(frame_2, text="OK", width=20,command=self.dodawanie)
-
-
-        self.label_1.grid(row=0, sticky=W)
-        self.label_2.grid(row=1, sticky=W)
-        self.label_3.grid(row=2, sticky=W)
-        self.label_4.grid(row=3, sticky=W)
-        self.label_5.grid(row=4, sticky=W)
-        self.label_6.grid(row=5, sticky=W)
-        self.label_7.grid(row=6, sticky=W)
-
-        self.entry_1.grid(row=0, column=1, columnspan=2)
-        self.entry_2.grid(row=1, column=1, columnspan=2)
-        self.entry_3.grid(row=2, column=1, columnspan=2)
-        self.entry_4.grid(row=3, column=1, columnspan=2)
-        self.entry_5.grid(row=4, column=1, columnspan=2)
-        self.entry_6.grid(row=5, column=1, columnspan=2)
-        self.entry_7.grid(row=6, column=1, columnspan=2)
-
-        #self.button_1.grid(row=4,column=1)
-        #self.button_2.grid(row=4,column=2)
-        self.button_3.grid(row=7, columnspan=3)
-    """
     def dodawanie(self):
         patient_atr=[]
-        patient_atr.append(self.entry_1.get())
-        patient_atr.append(self.entry_2.get())
-        patient_atr.append(self.entry_3.get())
-        patient_atr.append(self.entry_4.get())
-        patient_atr.append(self.entry_5.get())
-        patient_atr.append(self.entry_6.get())
-        patient_atr.append(self.entry_7.get())
-
+        for i in self.entry:
+            patient_atr.append(i.get())
         Main_fun.add_pacient(patient_atr)
         self.master.destroy()
-class WyborPacjenta:
+class WyborPacjenta(ttk.Frame):
 
-    def __init__(self,parent):
+    def __init__(self,master=None):
+        ttk.Frame.__init__(self, master)
 
-        self.master = Toplevel(parent)
-        self.master.title('Program')
-        self.master.resizable(0, 0)
+        self.master = master
+        self.master.maxsize(325, 160)
+        self.master.minsize(325, 160)
+        self.master.title("Wybierz pacjenta")
 
-        frame = Frame(self.master)
-        frame.pack()
+        self.pack(fill=BOTH, expand=True)
 
-        self.label_1 = Label(frame,text="Po czym chcesz szukac pacjenta")
+        self.layout()
+    def layout(self):
 
-        self.button_1 = Button(frame,text="ID",width=20,command=self.id)
-        self.button_2 = Button(frame, text="Imie", width=20,command=self.imie)
-        self.button_3 = Button(frame, text="Nazwisko", width=20,command=self.nazwisko)
-        self.button_4 = Button(frame, text="Pesel", width=20,command=self.pesel)
+        label_1 = ttk.Label(self,text="Po czym chcesz szukac pacjenta:",style="title.TLabel").place(x=0,y=0)
+        ttk.Button(self,text="ID",style="TButton",command=self.id).place(x=0,y=40)
+        ttk.Button(self, text="Imie",style="TButton",command=self.imie).place(x=0,y=70)
+        ttk.Button(self, text="Nazwisko",style="TButton",command=self.nazwisko).place(x=0,y=100)
+        ttk.Button(self, text="Pesel",style="TButton",command=self.pesel).place(x=0,y=130)
 
-        self.label_1.grid(row=0)
-        self.button_1.grid(row=1)
-        self.button_2.grid(row=2)
-        self.button_3.grid(row=3)
-        self.button_4.grid(row=4)
 
+        # ----------- STYLES ------------
+        style = ttk.Style()
+        style.configure("TFrame",
+                        background="#607D8B"
+                        )
+        style.configure("title.TLabel",
+                        background="#455A64",
+                        foreground="#42A5F5",
+                        font="Arial 15 bold",
+                        width=500,
+                        padding=5,
+                        )
+        style.configure("TButton",
+                        relief="flat",
+                        background="#455A64",
+                        foreground="#455A64",
+                        width=55,
+                        padding =2)
     def id(self):
         self.i_d = ID(self.master)
         Main_fun.commit()
