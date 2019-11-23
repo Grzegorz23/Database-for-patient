@@ -127,7 +127,8 @@ class PodstawoweManu (ttk.Frame):
         if answer == 'yes':
             Main_fun.deleta_all_patient()
 
-
+    def loop(self):
+        self.window.mainloop()
 
 class DodawaniePacjentow(ttk.Frame):
 
@@ -163,7 +164,7 @@ class DodawaniePacjentow(ttk.Frame):
             label_01.place(x=0, y=layout_counter)
             self.entry[i].place(x=160,y=layout_counter)
             layout_counter +=30
-        button_1 = ttk.Button(self, text="OK", style="TButton")
+        button_1 = ttk.Button(self, text="OK", style="TButton",command=self.dodawanie)
         button_1.place(x=0,y=layout_counter)
         # ----------- STYLES ------------
         style = ttk.Style()
@@ -193,13 +194,55 @@ class DodawaniePacjentow(ttk.Frame):
                   foreground=[('pressed', 'blue'), ('active', 'blue')],
                   background=[('pressed', '!disabled', 'black'), ('active', 'white')]
                   )
+    """
+        self.label_1 = Label(frame_2,text="Podaj Imie")
+        self.label_2 = Label(frame_2,text="Podaj Nazwisko")
+        self.label_3 = Label(frame_2,text="Podaj Pesel")
+        self.label_4 = Label(frame_2,text="Podaj Date")
+        self.label_5 = Label(frame_2,text="Podaj rodzaj badania")
+        self.label_6 = Label(frame_2,text="Jakie zdjecie")
+        self.label_7 = Label(frame_2,text="Podaj gabinet")
 
+        self.entry_1 = Entry(frame_2, width = 20)
+        self.entry_2 = Entry(frame_2, width = 20)
+        self.entry_3 = Entry(frame_2, width = 20)
+        self.entry_4 = Entry(frame_2, width = 20)
+        self.entry_5 = Entry(frame_2, width = 20)
+        self.entry_6 = Entry(frame_2, width = 20)
+        self.entry_7 = Entry(frame_2, width = 20)
+
+        #self.button_1 = Button(frame_2, text="Analog", height = 1, width = 7)
+        #self.button_2 = Button(frame_2, text="Cyfrowka", height = 1, width = 7)
+        self.button_3 = Button(frame_2, text="OK", width=20,command=self.dodawanie)
+
+
+        self.label_1.grid(row=0, sticky=W)
+        self.label_2.grid(row=1, sticky=W)
+        self.label_3.grid(row=2, sticky=W)
+        self.label_4.grid(row=3, sticky=W)
+        self.label_5.grid(row=4, sticky=W)
+        self.label_6.grid(row=5, sticky=W)
+        self.label_7.grid(row=6, sticky=W)
+
+        self.entry_1.grid(row=0, column=1, columnspan=2)
+        self.entry_2.grid(row=1, column=1, columnspan=2)
+        self.entry_3.grid(row=2, column=1, columnspan=2)
+        self.entry_4.grid(row=3, column=1, columnspan=2)
+        self.entry_5.grid(row=4, column=1, columnspan=2)
+        self.entry_6.grid(row=5, column=1, columnspan=2)
+        self.entry_7.grid(row=6, column=1, columnspan=2)
+
+        #self.button_1.grid(row=4,column=1)
+        #self.button_2.grid(row=4,column=2)
+        self.button_3.grid(row=7, columnspan=3)
+    """
     def dodawanie(self):
         patient_atr=[]
         for i in self.entry:
             patient_atr.append(i.get())
         Main_fun.add_pacient(patient_atr)
         self.master.destroy()
+        main()
 class WyborPacjenta(ttk.Frame):
 
     def __init__(self,master=None):
