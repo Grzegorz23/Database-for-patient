@@ -299,28 +299,43 @@ class WyborPacjenta(ttk.Frame):
         self.pesel= Pesel(self.master)
         Main_fun.commit()
         #self.master.destroy()
-class Imie:
+class Imie(ttk.Frame):
 
-    def __init__(self,parent):
+    def __init__(self, master=None):
+        ttk.Frame.__init__(self, master)
 
-        self.master = Toplevel(parent)
+        self.master = master
+        self.master.maxsize(325, 160)
+        self.master.minsize(325, 160)
         self.master.title('Program')
-        self.master.resizable(0, 0)
 
-        frame = Frame(self.master)
-        frame.pack()
+        self.pack(fill=BOTH, expand=True)
 
-        self.label=Label(frame,text="Podaj imie")
+    def layout(self):
+        label=Label(self,text="Podaj imie",style="title.TLabel").place(x=0,y=0)
 
-        self.enter=Entry(frame)
+        enter=Entry(self).place(x=0,y=40)
 
-        self.button=Button(frame,text="OK",width=20,command=self.wyswietl_imie)
+        button=Button(self,text="OK",style="TButton",command=self.wyswietl_imie).place(x=0,y=80)
 
-        self.label.grid(row=0)
-
-        self.enter.grid(row=0,column=1)
-
-        self.button.grid(row=1,columnspan=2)
+        # ----------- STYLES ------------
+        style = ttk.Style()
+        style.configure("TFrame",
+                        background="#607D8B"
+                        )
+        style.configure("title.TLabel",
+                        background="#455A64",
+                        foreground="#42A5F5",
+                        font="Arial 15 bold",
+                        width=500,
+                        padding=5,
+                        )
+        style.configure("TButton",
+                        relief="flat",
+                        background="#455A64",
+                        foreground="#455A64",
+                        width=55,
+                        padding =2)
 
     def wyswietl_imie(self):
         name_entry_get = self.enter.get()
@@ -514,7 +529,6 @@ class Wyswietlacz:
 def main():
     global root_01
     root_01 = Tk()
-
     app_01 = PodstawoweManu(root_01)
     root_01.mainloop()
 
