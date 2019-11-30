@@ -288,7 +288,12 @@ class WyborPacjenta(ttk.Frame):
         Main_fun.commit()
         #self.master.destroy()
     def imie(self):
-        self.imie = Imie(self.master)
+        global root_01
+        global root_05
+        root_05.destroy()
+        root_06 = Tk()
+        app_06 = Imie(root_06)
+        root_06.mainloop()
         Main_fun.commit()
         #self.master.destroy()
     def nazwisko(self):
@@ -310,13 +315,13 @@ class Imie(ttk.Frame):
         self.master.title('Program')
 
         self.pack(fill=BOTH, expand=True)
-
+        self.layout()
     def layout(self):
-        label=Label(self,text="Podaj imie",style="title.TLabel").place(x=0,y=0)
+        label=ttk.Label(self,text="Podaj imie",style="title.TLabel").place(x=0,y=0)
 
-        enter=Entry(self).place(x=0,y=40)
+        self.enter=ttk.Entry(self).place(x=0,y=40)
 
-        button=Button(self,text="OK",style="TButton",command=self.wyswietl_imie).place(x=0,y=80)
+        button=ttk.Button(self,text="OK",style="TButton",command=self.wyswietl_imie).place(x=0,y=80)
 
         # ----------- STYLES ------------
         style = ttk.Style()
@@ -342,28 +347,47 @@ class Imie(ttk.Frame):
         patient_data = Main_fun.name_of_patient(name_entry_get)
         Wyswietlacz(self.master,patient_data)
         Main_fun.commit()
-        #self.master.destroy()
-class ID:
+        self.master.destroy()
+class ID(ttk.Frame):
 
-    def __init__(self,parent):
+    def __init__(self,master=None):
 
-        self.master = Toplevel(parent)
+        ttk.Frame.__init__(self, master)
+
+        self.master = master
+        self.master.maxsize(325, 160)
+        self.master.minsize(325, 160)
         self.master.title('Program')
-        self.master.resizable(0, 0)
-        frame = Frame(self.master)
-        frame.pack()
 
-        self.label=Label(frame,text="Podaj ID")
+        self.pack(fill=BOTH, expand=True)
 
-        self.enter=Entry(frame)
+        self.layout()
 
-        self.button=Button(frame,text="OK",width=20,command=self.wyswietl_id)
+    def layout(self):
+        label=ttk.Label(self,text="Podaj ID",style="title.TLabel").place(x=0,y=0)
 
-        self.label.grid(row=0)
+        self.enter=ttk.Entry(self).place(x=0,y=40)
 
-        self.enter.grid(row=0,column=1)
+        button=ttk.Button(self,text="OK",style="TButton",command=self.wyswietl_id).place(x=0,y=80)
 
-        self.button.grid(row=1,columnspan=2)
+        # ----------- STYLES ------------
+        style = ttk.Style()
+        style.configure("TFrame",
+                        background="#607D8B"
+                        )
+        style.configure("title.TLabel",
+                        background="#455A64",
+                        foreground="#42A5F5",
+                        font="Arial 15 bold",
+                        width=500,
+                        padding=5,
+                        )
+        style.configure("TButton",
+                        relief="flat",
+                        background="#455A64",
+                        foreground="#455A64",
+                        width=55,
+                        padding =2)
 
     def wyswietl_id(self):
         name_entry_get = self.enter.get()
@@ -371,27 +395,45 @@ class ID:
 
         Wyswietlacz(self.master, patient_data)
         Main_fun.commit()
-        #self.master.destroy()
-class Nazwisko:
+        self.master.destroy()
+class Nazwisko(ttk.Frame):
 
-    def __init__(self,parent):
-        self.master = Toplevel(parent)
+    def __init__(self, master=None):
+        ttk.Frame.__init__(self, master)
+
+        self.master = master
+        self.master.maxsize(325, 160)
+        self.master.minsize(325, 160)
         self.master.title('Program')
-        self.master.resizable(0, 0)
-        frame = Frame(self.master)
-        frame.pack()
 
-        self.label=Label(frame,text="Podaj nazwisko")
+        self.pack(fill=BOTH, expand=True)
+        self.layout()
+    def layout(self):
+        label=ttk.Label(self,text="Podaj nazwisko",style="title.TLabel").place(x=0,y=0)
 
-        self.enter=Entry(frame)
+        self.enter=ttk.Entry(self).place(x=0,y=40)
 
-        self.button=Button(frame,text="OK",width=20,command=self.wyswietl_nazwisko)
+        button=ttk.Button(self,text="OK",style="TButton",command=self.wyswietl_nazwisko).place(x=0,y=80)
 
-        self.label.grid(row=0)
+        # ----------- STYLES ------------
+        style = ttk.Style()
+        style.configure("TFrame",
+                        background="#607D8B"
+                        )
+        style.configure("title.TLabel",
+                        background="#455A64",
+                        foreground="#42A5F5",
+                        font="Arial 15 bold",
+                        width=500,
+                        padding=5,
+                        )
+        style.configure("TButton",
+                        relief="flat",
+                        background="#455A64",
+                        foreground="#455A64",
+                        width=55,
+                        padding =2)
 
-        self.enter.grid(row=0,column=1)
-
-        self.button.grid(row=1,columnspan=2)
     def wyswietl_nazwisko(self):
         surname_entry_get = self.enter.get()
         patient_data=Main_fun.surname_of_patient(surname_entry_get)
@@ -399,28 +441,44 @@ class Nazwisko:
         Wyswietlacz(self.master,patient_data)
 
         Main_fun.commit()
-        #self.master.destroy()
-class Pesel:
+        self.master.destroy()
+class Pesel(ttk.Frame):
 
-    def __init__(self,parent):
-        self.master = Toplevel(parent)
+    def __init__(self, master=None):
+        ttk.Frame.__init__(self, master)
+
+        self.master = master
+        self.master.maxsize(325, 160)
+        self.master.minsize(325, 160)
         self.master.title('Program')
-        self.master.resizable(0, 0)
 
-        frame = Frame(self.master)
-        frame.pack()
+        self.pack(fill=BOTH, expand=True)
+        self.layout()
+    def layout(self):
+        label=ttk.Label(self,text="Podaj pesel",style="title.TLabel").place(x=0,y=0)
 
-        self.label=Label(frame,text="Podaj Pesel")
+        self.enter=ttk.Entry(self).place(x=0,y=40)
 
-        self.enter=Entry(frame)
+        button=ttk.Button(self,text="OK",style="TButton",command=self.wyswietl_pesel).place(x=0,y=80)
 
-        self.button=Button(frame,text="OK",width=20,command=self.wyswietl_pesel)
-
-        self.label.grid(row=0)
-
-        self.enter.grid(row=0,column=1)
-
-        self.button.grid(row=1,columnspan=2)
+        # ----------- STYLES ------------
+        style = ttk.Style()
+        style.configure("TFrame",
+                        background="#607D8B"
+                        )
+        style.configure("title.TLabel",
+                        background="#455A64",
+                        foreground="#42A5F5",
+                        font="Arial 15 bold",
+                        width=500,
+                        padding=5,
+                        )
+        style.configure("TButton",
+                        relief="flat",
+                        background="#455A64",
+                        foreground="#455A64",
+                        width=55,
+                        padding =2)
 
     def wyswietl_pesel(self):
         pesel_entry_get= self.enter.get()
@@ -429,27 +487,48 @@ class Pesel:
 
         b = Wyswietlacz(self.master,patient_data)
         Main_fun.commit()
-        #self.master.destroy()
-class UsunPacjenta:
+        self.master.destroy()
+class UsunPacjenta(ttk.Frame):
 
-    def __init__(self,parent):
-        self.master = Toplevel(parent)
+    def __init__(self, master=None):
+        ttk.Frame.__init__(self, master)
+
+        self.master = master
+        self.master.maxsize(400, 100)
+        self.master.minsize(400, 100)
         self.master.title('Program')
-        self.master.resizable(0, 0)
-        frame =Frame(self.master)
-        frame.pack()
+        self.pack(fill=BOTH, expand=True)
 
-        self.lable=Label(frame,text="Podaj ID pacjenta ktorego chcesz usunac")
+        self.layout()
 
-        self.button=Button(frame,text="OK",width=20,command=self.usun)
-        self.entry=Entry(frame)
+    def layout(self):
+        label=ttk.Label(self,text="Podaj ID pacjenta ktorego chcesz usunac",style="title.TLabel").place(x=0,y=0)
 
-        self.lable.grid(row=0)
-        self.button.grid(row=1,columnspan=2)
-        self.entry.grid(row=0,column=1)
+        self.enter=Entry(self).place(x=0,y=40,width=400)
+
+        button=ttk.Button(self,text="OK",style="TButton",command=self.usun).place(x=0,y=70)
+
+        # ----------- STYLES ------------
+        style = ttk.Style()
+        style.configure("TFrame",
+                        background="#607D8B"
+                        )
+        style.configure("title.TLabel",
+                        background="#455A64",
+                        foreground="#42A5F5",
+                        font="Arial 15 bold",
+                        width=500,
+                        padding=5,
+                        )
+        style.configure("TButton",
+                        relief="flat",
+                        background="#455A64",
+                        foreground="#455A64",
+                        width=65,
+                        padding =2)
 
     def usun(self):
-        id_entry_get = self.entry.get()
+        id_entry_get = self.enter.get()
         Main_fun.delete_patient(id_entry_get)
         self.master.destroy()
 class WszyscyPacjenci:
@@ -552,6 +631,7 @@ def allpc():
     root_04.mainloop()
 def selectpc():
     global root_01
+    global root_05
     root_01.destroy()
     root_05 = Tk()
     app_05 = WyborPacjenta(root_05)
